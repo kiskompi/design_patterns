@@ -15,20 +15,20 @@ public:
     Employee  &operator=(const Employee  &) = default;
     ~Employee ();
 
-    std::string getPrintable (){
+    std::string getPrintable () const {
         return "'" + m_name + "','" + m_address + "', '" + m_email + "', '" + m_phone + "'" ;
     }
     
-    std::string getName (){
+    std::string getName    () const {
         return m_name;
     }
-    std::string getAddress (){
+    std::string getAddress () const {
         return m_address;
     }
-    std::string getEmail (){
+    std::string getEmail   () const {
         return m_email;
     }
-    std::string getPhone (){
+    std::string getPhone   () const {
         return m_phone;
     }
 

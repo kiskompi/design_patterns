@@ -23,11 +23,11 @@ public:
 
     Task  &operator=(Task  &&) = default;
     Task  &operator=(const Task  &) = default;
-    virtual std::string getPrintable ();
-    virtual std::string getName(){return m_name;}
-    virtual std::string getType(){return m_type;}
-    virtual std::string getDesc(){return m_desc;}
-    virtual std::string getDeadline(){return m_deadline.to_string();}
+    virtual std::string getPrintable () const ;
+    virtual std::string getName      () const {return m_name;}
+    virtual std::string getType      () const {return m_type;}
+    virtual std::string getDesc      () const {return m_desc;}
+    virtual std::string getDeadline  () const {return m_deadline.to_string();}
 
 
     ~Task ();
@@ -50,7 +50,7 @@ Task ::~Task ()
 }
 
 
-std::string Task::getPrintable (){
+std::string Task::getPrintable () const {
     return "'" + m_name + "','" + m_type + "', '" + std::to_string(m_priority) + "', '" + m_deadline.to_string() + "', '" + m_desc + "'" ;
 }
 

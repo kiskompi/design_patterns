@@ -75,9 +75,9 @@ bool DAOTask::deleteFromDB    (sqlite3* hdl, Object* t)
 {
     Task* task = reinterpret_cast<Task*>(t);
     std::string query = "DELETE FROM TASKS WHERE NAME =\'"
-    + task->getName () + "\' AND TYPE = \'" 
-    + task->getType () + "\' AND DESC = \'" 
-    + task->getDesc () + "\' AND DEADLINE = \'" 
+    + task->getName     () + "\' AND TYPE = \'" 
+    + task->getType     () + "\' AND DESC = \'" 
+    + task->getDesc     () + "\' AND DEADLINE = \'" 
     + task->getDeadline () + "\';";
     int err = sqlite3_exec (hdl, query.c_str (), NULL,NULL, NULL);
     std::cout<<query<<"\n"<<sqlite3_errmsg(hdl)<<std::endl;

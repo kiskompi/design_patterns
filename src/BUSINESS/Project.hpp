@@ -13,9 +13,9 @@ public:
     Project  &operator=(Project &&)      = default;
     Project  &operator=(const Project &) = default;
     ~Project ();
-    std::string getPrintable ();
-    std::string getName      (){return m_name;}
-    std::string getDesc      (){return m_desc;}
+    std::string getPrintable () const ;
+    std::string getName      () const {return m_name;}
+    std::string getDesc      () const {return m_desc;}
     friend class DAOProject;
 private:
     std::string m_name;
@@ -30,7 +30,7 @@ Project ::~Project ()
 {
 }
 
-std::string Project::getPrintable()
+std::string Project::getPrintable () const 
 {
     return "'" + m_name + "', '" + m_desc +"'";
 }

@@ -18,11 +18,13 @@ public:
     DAOProject &operator=(const DAOProject &) = default;
     ~DAOProject();
 
-
+    // list all entry from the database
     virtual Vect getAll         (sqlite3* hdl);
+    // lists any entry from the database with the same name as the parameter
+    virtual Vect select         (sqlite3* hdl, Object* p);
+    
     virtual void createTable    (sqlite3* hdl);
     virtual void fillTable      (sqlite3* hdl);
-    virtual Vect select         (sqlite3* hdl, Object* p);
     virtual bool update         (sqlite3* hdl, Object* p);
     virtual bool deleteFromDB   (sqlite3* hdl, Object* p);
     virtual void add            (sqlite3* hdl, Object* p);
@@ -30,7 +32,6 @@ public:
 private:
     
 static int callback(void* used, int argc, char **argv, char**azColName){
-    std::cout<<"kai\n";
     return 0;
 }
 };
@@ -53,7 +54,6 @@ void DAOProject::fillTable   (sqlite3* hdl)
     int err = 0;
     for (auto q: INSERT_INTO_PROJECTS)
     if ((err = sqlite3_exec (hdl, q, NULL, NULL, NULL)) != 0) {
-        //std::cout<<q<<"\n";
         break;
     }
 }
@@ -80,6 +80,7 @@ bool DAOProject::update       (sqlite3* hdl, Object* p)
     return false;
 }
 
+
 bool DAOProject::deleteFromDB (sqlite3* hdl, Object* p)
 {
     Project* project = reinterpret_cast<Project*>(p);
@@ -91,10 +92,6 @@ bool DAOProject::deleteFromDB (sqlite3* hdl, Object* p)
     return false;
 }
 
-
-// =============
-// add an entry to the database
-// =============
 void DAOProject::add (sqlite3* hdl, Object* p)
 {
     Project* project = reinterpret_cast<Project*>(p);    
