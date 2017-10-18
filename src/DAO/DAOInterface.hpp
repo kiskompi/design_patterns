@@ -15,11 +15,6 @@ public:
     //virtual DAOInterface &operator= (DAOInterface &&) = 0;
     //virtual DAOInterface &operator= (const DAOInterface &) = 0;
     virtual ~DAOInterface (){};
-    
-    static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-       
-        return 0;
-    }
 
     //virtual void addToDB (sqlite3*, Object*)      = 0;
 //    virtual Vect getAll         (sqlite3* hdl)              {}

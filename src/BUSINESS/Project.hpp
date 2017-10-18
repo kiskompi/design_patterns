@@ -32,6 +32,6 @@ Project ::~Project ()
 
 std::string Project::getPrintable()
 {
-    return m_name + ": " + m_desc;
+    return "'" + m_name + "', '" + m_desc +"'";
 }
 #endif // !PROJECT_HPP

@@ -1,0 +1,86 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "taskName": "Build",
+            "type": "shell",
+            "problemMatcher": "$gcc",
+            "command": "g++ -std=c++14 src/TEST/SQLiteTest.cpp src/SQLITE/sqlite3.o -o build/SQLiteTest.o -lpthread -ldl"
+        },
+        {
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "taskName": "Build SQLiteTest2",
+            "type": "shell",
+            "problemMatcher": "$gcc",
+            "command": "g++ -std=c++14 src/TEST/SQLiteTest2.cpp src/SQLITE/sqlite3.o -o build/SQLiteTest2.o -lpthread -ldl"
+        },
+        {
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "taskName": "Build SQLiteTestCreate",
+            "type": "shell",
+            "problemMatcher": "$gcc",
+            "command": "g++ -std=c++14 src/TEST/SQLiteTestCreate.cpp src/SQLITE/sqlite3.o -o build/SQLiteTestCreate.o -lpthread -ldl"
+        },
+        {
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "taskName": "Build DaoTest",
+            "type": "shell",
+            "problemMatcher": "$gcc",
+            "command": "g++ -g -std=c++14 src/TEST/DAOTest01.cpp src/SQLITE/sqlite3.o -o build/DAOTest01.o -lpthread -ldl"
+        },
+        {
+            "taskName": "Run SQLiteTest",
+            "type": "shell",
+            "command": "build/SQLiteTest.o",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "taskName": "Run SQLiteTestCreate",
+            "type": "shell",
+            "command": "build/SQLiteTestCreate.o",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "taskName": "Run SQLiteTest2",
+            "type": "shell",
+            "command": "build/SQLiteTest2.o",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "taskName": "Run DAOTest",
+            "type": "shell",
+            "command": "build/DAOTest01.o",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

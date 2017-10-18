@@ -22,6 +22,15 @@ public:
     std::string getName (){
         return m_name;
     }
+    std::string getAddress (){
+        return m_address;
+    }
+    std::string getEmail (){
+        return m_email;
+    }
+    std::string getPhone (){
+        return m_phone;
+    }
 
     friend class DAOEmployee;
 private:
