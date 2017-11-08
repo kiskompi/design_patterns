@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
    }
 
    /* Create SQL statement */
-   sql = "CREATE TABLE COMPANY("  \
+   sql = "query::CREATE TABLE COMPANY("  \
          "ID INT PRIMARY KEY     NOT NULL," \
          "NAME           TEXT    NOT NULL," \
          "AGE            INT     NOT NULL," \

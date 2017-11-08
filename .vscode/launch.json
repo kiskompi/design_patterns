@@ -6,7 +6,7 @@
                 "name": "(gdb) Launch",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceRoot}/build/DAOTest01.o",
+                "program": "${workspaceRoot}/build/BusinessTest.o",
                 "args": [],
                 "stopAtEntry": false,
                 "cwd": "${workspaceRoot}",

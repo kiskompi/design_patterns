@@ -11,7 +11,7 @@
             "taskName": "Build",
             "type": "shell",
             "problemMatcher": "$gcc",
-            "command": "g++ -std=c++14 src/TEST/SQLiteTest.cpp src/SQLITE/sqlite3.o -o build/SQLiteTest.o -lpthread -ldl"
+            "command": "g++ -std=c++17 src/TEST/SQLiteTest.cpp src/SQLITE/sqlite3.o -o build/SQLiteTest.o -lpthread -ldl"
         },
         {
             "group": {
@@ -36,12 +36,22 @@
         {
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "taskName": "Build DaoTest",
             "type": "shell",
             "problemMatcher": "$gcc",
-            "command": "g++ -g -std=c++14 src/TEST/DAOTest01.cpp src/SQLITE/sqlite3.o -o build/DAOTest01.o -lpthread -ldl"
+            "command": "g++ -g -std=c++17 src/TEST/DAOTest01.cpp src/SQLITE/sqlite3.o -o build/DAOTest01.o -lpthread -ldl"
+        },
+        {
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "taskName": "Build BusinessTest01",
+            "type": "shell",
+            "problemMatcher": "$gcc",
+            "command": "g++ -g -O0 -std=c++14 src/TEST/BusinessTest01.cpp src/SQLITE/sqlite3.o -o build/BusinessTest.o -lpthread -ldl"
         },
         {
             "taskName": "Run SQLiteTest",
@@ -74,6 +84,18 @@
             "taskName": "Run DAOTest",
             "type": "shell",
             "command": "build/DAOTest01.o",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "taskName": "Run BusinessTest",
+            "type": "shell",
+            "command": "build/BusinessTest.o",
             "problemMatcher": [
                 "$gcc"
             ],

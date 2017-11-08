@@ -4,99 +4,96 @@
 #include <vector>
 
 #include "DAOInterface.hpp"
-#include "../BUSINESS/Project.hpp"
+#include "../TRANSFER/Project.hpp"
 
 class DAOProject: public DAOInterface {
-    typedef std::vector<Project> Vect;
     static int callback_select (void* used, int argc, char **argv, char **azColName);
-
+sqlite3* hdl;
 public:
+    typedef std::vector<Project> Vect;
+
     DAOProject ();
-    DAOProject (DAOProject &&)                = default;
-    DAOProject (const DAOProject &)           = default;
-    DAOProject &operator=(DAOProject &&)      = default;
-    DAOProject &operator=(const DAOProject &) = default;
+    DAOProject (DAOProject &&)                 = default;
+    DAOProject (const DAOProject &)            = default;
+    DAOProject &operator= (DAOProject &&)      = default;
+    DAOProject &operator= (const DAOProject &) = default;
     ~DAOProject();
 
     // list all entry from the database
-    virtual Vect getAll         (sqlite3* hdl);
+    virtual Vect getAll         ( ) const;
     // lists any entry from the database with the same name as the parameter
-    virtual Vect select         (sqlite3* hdl, Object* p);
     
-    virtual void createTable    (sqlite3* hdl);
-    virtual void fillTable      (sqlite3* hdl);
-    virtual bool update         (sqlite3* hdl, Object* p);
-    virtual bool deleteFromDB   (sqlite3* hdl, Object* p);
-    virtual void add            (sqlite3* hdl, Object* p);
-
-private:
-    
-static int callback(void* used, int argc, char **argv, char**azColName){
-    return 0;
-}
+    virtual void createTable    () const;
+    virtual void fillTable      () const;
+    virtual bool update         (TransferObject* p) const;
+    virtual bool deleteFromDB   (TransferObject* p) const;
+    virtual void add            (TransferObject* p) const;
+    virtual Vect select         (TransferObject* p) const;
 };
 
-DAOProject::DAOProject()
+DAOProject::DAOProject ()
 {
+    sqlite3_open("test.db", &hdl);
 }
 
-DAOProject::~DAOProject()
+DAOProject::~DAOProject ()
 {
+    sqlite3_close(hdl);
 }
 
-void DAOProject::createTable (sqlite3* hdl)
+void DAOProject::createTable () const 
 {
-    int err  = sqlite3_exec (hdl, CREATE_TABLE_PROJECTS, NULL, NULL, NULL);
+    int err  = sqlite3_exec (hdl, query::CREATE_TABLE_PROJECTS, NULL, NULL, NULL);
 }
 
-void DAOProject::fillTable   (sqlite3* hdl)
+void DAOProject::fillTable   () const 
 {
     int err = 0;
-    for (auto q: INSERT_INTO_PROJECTS)
+    for (auto q: query::INSERT_INTO_PROJECTS)
     if ((err = sqlite3_exec (hdl, q, NULL, NULL, NULL)) != 0) {
-        break;
+        break;  
     }
 }
 
-DAOProject::Vect DAOProject::getAll (sqlite3* hdl)
+DAOProject::Vect DAOProject::getAll ( ) const 
 {
     Vect vect = Vect();
     int  err  = sqlite3_exec (hdl, "SELECT * FROM PROJECTS;", callback_select, &vect, NULL);
     return vect;
 }
 
-DAOProject::Vect DAOProject::select (sqlite3* hdl, Object* p)
+DAOProject::Vect DAOProject::select (TransferObject* p) const 
 {
     Project* project = reinterpret_cast<Project*>(p);    
-    std::string query = "SELECT * FROM PROJECTS WHERE NAME =\'" + project->getName () + "\'";
+    std::string query = "SELECT * FROM PROJECTS WHERE NAME =\'" + project->get_name () + "\'";
     Vect vec = Vect();
     int err = sqlite3_exec (hdl, query.c_str (), callback_select, &vec, NULL);
     return vec;
 }
 
-bool DAOProject::update       (sqlite3* hdl, Object* p)
+bool DAOProject::update       (TransferObject* p) const 
 {
     Project* employee = reinterpret_cast<Project*>(p);    
     return false;
 }
 
 
-bool DAOProject::deleteFromDB (sqlite3* hdl, Object* p)
+bool DAOProject::deleteFromDB (TransferObject* p) const 
 {
     Project* project = reinterpret_cast<Project*>(p);
     std::string query = "DELETE FROM PROJECTS WHERE NAME =\'"
-                      + project->getName () + "\' AND DESC = \'" 
-                      + project->getDesc () + "\';";
+                      + project->get_name () + "\' AND DESC = \'" 
+                      + project->get_desc () + "\';";
     int err = sqlite3_exec (hdl, query.c_str (), NULL,NULL, NULL);
-    std::cout<<query<<"\n"<<sqlite3_errmsg(hdl)<<std::endl;
+    //std::cout<<query<<"\n"<<sqlite3_errmsg(hdl)<<std::endl;
     return false;
 }
 
-void DAOProject::add (sqlite3* hdl, Object* p)
+void DAOProject::add (TransferObject* p) const 
 {
     Project* project = reinterpret_cast<Project*>(p);    
-    std::string query = "INSERT INTO PROJECTS VALUES(" + project->getPrintable () +  ");";
-    int err = sqlite3_exec (hdl, query.c_str (), callback, &query, NULL);
+    std::string query = "INSERT INTO PROJECTS VALUES(" + project->to_string () +  ");";
+    int err = sqlite3_exec (hdl, query.c_str (), NULL, NULL, NULL);
 }
 
 

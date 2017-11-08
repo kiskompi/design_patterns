@@ -1,21 +1,25 @@
 #ifndef PROJECT_HPP
 #include <string>
 #include "Object.hpp"
+
 class DAOProject;
-class Project: public Object
+class Project: public TransferObject
 {
 public:
     Project ();
     Project (Project  &&)      = default;
     Project (const Project  &) = default;
     Project (const std::string& name, const std::string& desc):
-        m_name(name), m_desc(desc){}
-    Project  &operator=(Project &&)      = default;
-    Project  &operator=(const Project &) = default;
+        m_name(name),
+        m_desc(desc){}
     ~Project ();
-    std::string getPrintable () const ;
-    std::string getName      () const {return m_name;}
-    std::string getDesc      () const {return m_desc;}
+    
+    Project  &operator= (Project &&)      = default;
+    Project  &operator= (const Project &) = default;
+
+    std::string to_string  () const ;
+    std::string get_name   () const {return m_name;}
+    std::string get_desc   () const {return m_desc;}
     friend class DAOProject;
 private:
     std::string m_name;
@@ -30,7 +34,7 @@ Project ::~Project ()
 {
 }
 
-std::string Project::getPrintable () const 
+std::string Project::to_string () const 
 {
     return "'" + m_name + "', '" + m_desc +"'";
 }

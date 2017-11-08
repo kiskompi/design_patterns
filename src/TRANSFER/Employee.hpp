@@ -1,9 +1,10 @@
 #ifndef EMPLOYEE_HPP
+#define EMPLOYEE_HPP
 #include <string>
 #include "Object.hpp"
-#include "Object.hpp"
+
 class DAOEmployee;
-class Employee : public Object
+class Employee : public TransferObject
 {
 public:
     Employee ();
@@ -15,20 +16,20 @@ public:
     Employee  &operator=(const Employee  &) = default;
     ~Employee ();
 
-    std::string getPrintable () const {
+    std::string to_string () const {
         return "'" + m_name + "','" + m_address + "', '" + m_email + "', '" + m_phone + "'" ;
     }
     
-    std::string getName    () const {
+    std::string get_name    () const {
         return m_name;
     }
-    std::string getAddress () const {
+    std::string get_address () const {
         return m_address;
     }
-    std::string getEmail   () const {
+    std::string get_email   () const {
         return m_email;
     }
-    std::string getPhone   () const {
+    std::string get_phone   () const {
         return m_phone;
     }
 
