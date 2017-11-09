@@ -54,6 +54,16 @@
             "command": "g++ -g -O0 -std=c++14 src/TEST/BusinessTest01.cpp src/SQLITE/sqlite3.o -o build/BusinessTest.o -lpthread -ldl"
         },
         {
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "taskName": "Build UITest01",
+            "type": "shell",
+            "problemMatcher": "$gcc",
+            "command": "g++ -g -O0 -std=c++14 src/TEST/UITest01.cpp src/SQLITE/sqlite3.o -o build/UITest01.o -lpthread -ldl"
+        },
+        {
             "taskName": "Run SQLiteTest",
             "type": "shell",
             "command": "build/SQLiteTest.o",
@@ -96,6 +106,18 @@
             "taskName": "Run BusinessTest",
             "type": "shell",
             "command": "build/BusinessTest.o",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "taskName": "Run UITest01",
+            "type": "shell",
+            "command": "build/UITest01.o",
             "problemMatcher": [
                 "$gcc"
             ],
