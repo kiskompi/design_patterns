@@ -1,21 +1,24 @@
 
+#ifndef QUERY_HPP
+#define QUERY_HPP
+
 namespace query {
     static constexpr const char* CREATE_TABLE_EMPLOYEES = 
         "CREATE TABLE EMPLOYEES("               \
-        "NAME           TEXT        NOT NULL,"  \
+        "NAME           TEXT        NOT NULL, PRIMARY KEY"  \
         "ADDRESS        CHAR(50),"              \
         "EMAIL          CHAR(50),"              \
-        "PHONE          CHAR(20));  NOT NULL PRIMARY KEY";
+        "PHONE          CHAR(20)  NOT NULL );";
 
     static constexpr const char* CREATE_TABLE_TASKS = 
         "CREATE TABLE TASKS("                   \
-        "ID             INT         NOT NULL PRIMARY KEY" \
-        "NAME           CHAR(50)    NOT NULL,"  \
+        "ID             INT         NOT NULL " \
+        "NAME           CHAR(50)    NOT NULL PRIMARY KEY,"  \
         "TYPE           CHAR(50)    NOT NULL,"  \
         "PRIORITY       INT         NOT NULL,"  \
         "DEADLINE       DATE        NOT NULL,"  \
-        "DESC           CHAR(200));"            \
-        "PROJECT        TEXT REFERENCES PROJECTS(NAME),";
+        "DESC           CHAR(200),"            \
+        "PROJECT        TEXT REFERENCES PROJECTS(NAME));";
 
     static constexpr const char* CREATE_TABLE_PROJECTS = 
         "CREATE TABLE PROJECTS("                \
@@ -104,3 +107,4 @@ namespace query {
         "VALUES('Bogre Peter', 'Piliscsaba Kossuth utca 31.', 'bogrepeter@ceg.hu', '06204539517');" 
     };
 } // !namespace query
+#endif //QUERY_HPP

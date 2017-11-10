@@ -11,7 +11,7 @@ class DAOEmployee: public DAOInterface
     typedef std::vector<Employee> Vect;
     
     static int callback_select (void* used, int argc, char **argv, char**azColName);
-    sqlite3* hdl;
+    sqlite3* hdl = query::hdl;
 
 public:
     DAOEmployee ();
@@ -31,6 +31,7 @@ public:
 
 DAOEmployee::DAOEmployee  ()
 {
+ if (hdl == nullptr)
     sqlite3_open("test.db", &hdl);
 }
 

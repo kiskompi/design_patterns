@@ -4,6 +4,7 @@
 #include "Object.hpp"
 #include "../BUSINESS/Deadline.hpp"
 #include "Employee.hpp"
+#include "../DAO/DAUtils.cpp"
 
 typedef std::shared_ptr<Employee> emp_ptr;
 class DAOTask;
@@ -35,6 +36,7 @@ public:
     virtual std::string get_type      () const {return m_type;}
     virtual std::string get_desc      () const {return m_desc;}
     virtual std::string get_project   () const {return m_project;}
+    virtual Employee    get_employee  () const {return *m_empl;}
     virtual std::string get_deadline  () const {return m_deadline.to_string();}
     
     virtual std::string set_name      (const std::string& param) {m_name = param;}
@@ -42,7 +44,7 @@ public:
     virtual std::string set_Desc      (const std::string& param) {m_desc = param;}
     virtual std::string set_project   (const std::string& param) {m_project = param;}
     virtual std::string set_deadline  (const Date&        param) {m_deadline = Deadline (param);}
-    void assign_to(Employee& p_emp);
+    void                assign_to(const Employee& p_emp);
 
     ~Task ();
     friend class DAOTask;
@@ -66,15 +68,16 @@ Task ::~Task ()
 }
 
 std::string Task::to_string () const {
-    return "'" + m_name + "','" + m_type + "', '" + std::to_string(m_priority) + "', '" + m_deadline.to_string() + "', '" + m_desc + "', '" + m_project + "'" ;
+    return "'" + m_name + "','" + m_type + "', '" + std::to_string(m_priority) + "', '" + m_deadline.to_string() + "', '" + m_desc + "', '" + m_project + "','" + m_empl->get_name () + "'" ;
 }
 
 // assign_to (employee) -- puts it into TASKS_EMPOYEES table with given employee
 // should be in BUSINESS layer!
-void Task::assign_to(Employee& p_emp) {
+void Task::assign_to(const Employee& p_emp) {
     // calls query from dao layer to insert entry to TASKS_EMPLOYEES
     // somehow represents it in business or transfer layer
     // "INSERT INTO TASKS_EMPLOYEES";
+    m_empl = std::make_shared<Employee> (p_emp);
 }
 
 bool Task::operator==(const Task& other) const 

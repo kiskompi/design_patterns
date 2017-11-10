@@ -2,11 +2,15 @@
 #define DAO_FACTORY
 
 #include <type_traits>
-#include "DAOInterface.hpp"
 #include <sqlite3.h>
 
-class DAOFactory
+#include "DAOInterface.hpp"
+#include "../LIB/Factory.hpp"
+
+
+class DAOFactory: public Factory<DAOInterface>
 {
+    sqlite3* hdl = query::hdl;
 public:
     DAOFactory();
     DAOFactory(DAOFactory &&)                 = default;
@@ -16,24 +20,18 @@ public:
     ~DAOFactory();
 
     template<typename DAOType>
-    DAOType* getDAO () const {
+    DAOType* get () const {
         static_assert(std::is_base_of<DAOInterface, DAOType>::value, "Template argument is not a DAO");
 
         return new DAOType ();
     }
-
-    void Initialize () const {
-        sqlite3* dbHdl;
-        int Err = 0;
-        Err = sqlite3_open ("../DATA/DB.sqlite3", &dbHdl);
-    }
-
-private:
     
 };
 
 DAOFactory::DAOFactory()
 {
+    if (hdl == nullptr)
+        sqlite3_open ("test.db", &hdl);    
 }
 
 DAOFactory::~DAOFactory()

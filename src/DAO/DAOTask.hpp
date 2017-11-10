@@ -1,6 +1,7 @@
 #ifndef DAO_TASK
 #define DAO_TASK
 
+#include <functional>
 #include "DAOInterface.hpp"
 #include "../TRANSFER/Task.hpp"
 
@@ -8,7 +9,7 @@ class DAOTask: public DAOInterface
 {
     typedef std::vector<Task> Vect;
     static int callback_select(void* used, int argc, char **argv, char**azColName);
-sqlite3* hdl;
+    sqlite3* hdl = query::hdl;
 
 public:
     DAOTask();
@@ -26,12 +27,14 @@ public:
     virtual void add          (TransferObject* t) const;
     virtual bool update       (TransferObject* t) const;
     virtual bool deleteFromDB (TransferObject* t) const;
-  
+    void         assign       (const Employee& empl, Task& task) const;
+    void         create_table_tasks_employees () const;
 };
 
 DAOTask::DAOTask ()
 {
-    sqlite3_open("test.db", &hdl);
+    if (hdl == nullptr)
+        sqlite3_open("test.db", &hdl);
 }
 
 DAOTask::~DAOTask()
@@ -73,6 +76,14 @@ bool DAOTask::update        (TransferObject* t) const
     return false;
 }
 
+void DAOTask::assign (const Employee& empl, Task& task) const
+{
+    const std::string query = "INSERT INTO TASKS_EMPLOYEES(" + task.to_string () + ", " + empl.to_string () + ");";
+    int err = sqlite3_exec (hdl, query.c_str (), NULL, NULL, NULL);
+    if (err == 0)
+        task.assign_to (empl);
+}
+
 bool DAOTask::deleteFromDB    (TransferObject* t) const
 {
     Task* task = reinterpret_cast<Task*>(t);
@@ -109,4 +120,11 @@ int DAOTask::callback_select (void* used, int argc, char **argv, char**azColName
         ));
     return 0;
 }
+void  DAOTask::create_table_tasks_employees () const {
+        const std::string query = "CREATE TABLE IF NOT EXISTS TASKS_EMPLOYEES(TASK CHAR[50], EMPLOYEE CHAR[50]);";
+        const char* qu = {query.c_str ()};
+        char* errms = 0;
+        int err = sqlite3_exec (hdl, query.c_str (), NULL, NULL, &errms);
+        std::cout<<errms<<std::endl;
+    }
 #endif

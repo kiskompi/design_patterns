@@ -8,7 +8,7 @@
 
 class DAOProject: public DAOInterface {
     static int callback_select (void* used, int argc, char **argv, char **azColName);
-sqlite3* hdl;
+    sqlite3* hdl = query::hdl;
 public:
     typedef std::vector<Project> Vect;
 
@@ -33,7 +33,8 @@ public:
 
 DAOProject::DAOProject ()
 {
-    sqlite3_open("test.db", &hdl);
+    if (hdl == nullptr)
+        sqlite3_open("test.db", &hdl);
 }
 
 DAOProject::~DAOProject ()

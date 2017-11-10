@@ -12,6 +12,8 @@ enum class CMD {
     LIST,
     MAKE,
     DROP,
+    SWITCH,
+    ASSIGN,
     HELP,
     QUIT
 };
@@ -54,10 +56,14 @@ CMD CommandAdapter::lookup_command (std::string strCommand) const
     std::string lowercase = str_tolower (strCommand);
     if (lowercase == "list")
         return CMD::LIST;
-    if (lowercase ==  "create")
+    if (lowercase ==  "make")
         return CMD::MAKE;
     if (lowercase ==  "drop")
         return CMD::DROP;
+    if (lowercase ==  "switch")
+        return CMD::SWITCH;
+    if (lowercase ==  "assign")
+        return CMD::ASSIGN;
     if (lowercase ==  "quit")
         return CMD::QUIT;
     if (lowercase ==  "help")
@@ -101,32 +107,33 @@ static std::vector<std::string> split(const std::string &txt)
 void CommandAdapter::execute_dummy (const std::string cmd) const {
     // VERY DUMMY
     std::vector<std::string> v = split( cmd );
-
+    if (v.empty ())
+        return;
     switch (lookup_command(v[0]))
     {
         case CMD::LIST:{
             switch (lookup_target(v[1]))
             {
                 case TARGET::PROJECTS:{
-                    auto vec = m_admin.list_projects  ();
+                    auto vec = m_admin.list<Project>  ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::TASKS:{
-                    auto vec = m_admin.list_tasks  ();
+                    auto vec = m_admin.list<Task>  ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::EMPLS:{
-                    auto vec = m_admin.list_employees ();
+                    auto vec = m_admin.list<Employee> ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::DEADLINES:{
-                    auto vec = m_admin.list_deadlines  ();
+                    auto vec = m_admin.list<Deadline>  ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
@@ -140,13 +147,13 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
             switch (lookup_target(v[1]))
             {
                 case TARGET::PROJECTS:
-                    m_admin.drop_project (v[2]);
+                    m_admin.drop<Project> (v[2]);
                     break;
                 case TARGET::TASKS:
-                    m_admin.drop_task (v[2]);
+                    m_admin.drop<Task> (v[2]);
                     break;
                 case TARGET::EMPLS:
-                    m_admin.drop_employee (v[2]);
+                    m_admin.drop<Employee> (v[2]);
                     break;
                 default:
                     std::cerr<<"Bad argument!\n";
@@ -161,7 +168,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    m_admin.make_project (v[2], v[3]);
+                    m_admin.make<Project> (v[2], v[3]);
                     break;
                 }
                 case TARGET::TASKS:{
@@ -169,7 +176,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    m_admin.make_task (v[2], v[3], v[4], v[5], v[6], v[7]);
+                    m_admin.make<Task> (v[2], v[3], v[4], v[5], v[6], v[7]);
                     break;
                 }
                 case TARGET::EMPLS:{
@@ -177,11 +184,27 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    m_admin.make_employee (v[2], v[3], v[4], v[5]);
+                    m_admin.make<Employee> (v[2], v[3], v[4], v[5]);
                     break;
                 }
                 default:
                     std::cerr<<"Bad argument!\n";
+            }
+        }
+        break;
+        case CMD::SWITCH: {
+            if (lookup_target(v[1]) == TARGET::TASKS){
+                short err = m_admin.switch_tasks (v[2], v[3]);
+                if (err != 0)
+                    std::cerr<<"No such task!\n ";
+            }
+        }
+        break;
+        case CMD::ASSIGN: {
+            if (lookup_target(v[1]) == TARGET::TASKS){
+                short err = m_admin.assign_task (v[2], v[3]);
+                if (err != 0)
+                    std::cerr<<"No such task or employee!\n ";
             }
         }
         break;
@@ -190,18 +213,19 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                      <<"DROP [TARGET] [NAME]    - deletes all of [target] with name [name]\n"
                      <<"MAKE [TARGET] [ARGS...] - creates [target] with specified parameters\n"
                      <<"HELP                    - displays this screen\n"
-                     <<"QUIT                    - quits program\n";
+                     <<"QUIT                    - quits program\n"<<std::endl;
             break;
         case CMD::QUIT:
             exit(0);
         default:
             std::cout<<"Bad command. For help, write: HELP\n";
     }
-    std::cout<<std::endl;
+    std::cout<<std::flush;
 }
 
 void CommandAdapter::ask (std::string& str) const {
     std::cout<<"\nCMD:: ";
     std::getline (std::cin,str);
+    std::cout<<std::endl;
 }
 #endif // COMMANDADAPTER_HPP

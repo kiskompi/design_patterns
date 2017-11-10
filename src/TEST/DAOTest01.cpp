@@ -7,9 +7,9 @@ int main () {
 
     DAOFactory    df         = DAOFactory();
 
-    DAOEmployee*  daoEmp     = df.getDAO<DAOEmployee>();
-    DAOTask*      daoTask    = df.getDAO<DAOTask>();
-    DAOProject*   daoProject = df.getDAO<DAOProject>();
+    DAOEmployee*  daoEmp     = df.get<DAOEmployee>();
+    DAOTask*      daoTask    = df.get<DAOTask>();
+    DAOProject*   daoProject = df.get<DAOProject>();
     df.Initialize ();
     
     daoEmp     -> createTable();

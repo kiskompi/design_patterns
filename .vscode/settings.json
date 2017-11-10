@@ -29,6 +29,7 @@
         "__nullptr": "cpp",
         "ios": "cpp",
         "optional": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "vector": "cpp"
     }
 }

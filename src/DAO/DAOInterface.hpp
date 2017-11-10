@@ -6,8 +6,9 @@
 #include <iostream>
 #include "../TRANSFER/Object.hpp"
 #include "Query.hpp"
-
-extern sqlite3* hdl;
+namespace query {
+    sqlite3* hdl = nullptr;
+}
 
 class DAOInterface
 {
@@ -15,7 +16,7 @@ public:
     
     virtual ~DAOInterface (){};
 
-    virtual void addToDB        (const TransferObject*) const {}
+    virtual void add        (const TransferObject*) const {}
     // =============
     // delete an entry from the database, which has the exact same values as the parameter Project
     // =============

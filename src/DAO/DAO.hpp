@@ -4,4 +4,5 @@
 #include "DAOEmployee.hpp"
 #include "DAOProject.hpp"
 #include "DAOTask.hpp"
+#include "DAUtils.cpp"
 #endif
