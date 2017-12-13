@@ -1,10 +1,14 @@
+#include "../TRANSFER/Employee.hpp"
+#include "../DAO/DAO.hpp"
+
 class TaskSwitcher {
     short switch_tasks (std::string& t1str, std::string& t2str);
  };
 
  
-short Administrator::switch_tasks (std::string& t1str, std::string& t2str) {
-    std::vector<Task> vec = list_tasks ();
+short TaskSwitcher::switch_tasks (std::string& t1str, std::string& t2str) {
+    DAOTask dt = DAOTask ();
+    std::vector<Task> vec = dt.getAll ();
     Task* t1 = nullptr;
     Task* t2 = nullptr;
     short s = 0;
@@ -24,8 +28,8 @@ short Administrator::switch_tasks (std::string& t1str, std::string& t2str) {
         return -1;
     
     Employee tmp_empl = t1->get_employee ();
-    m_dao_task.assign ( t2->get_employee (), *t1);
-    m_dao_task.assign (tmp_empl, *t2);
+    dt.assign ( t2->get_employee (), *t1);
+    dt.assign (tmp_empl, *t2);
 
     return 0;
 }

@@ -1,4 +1,6 @@
 #ifndef TASK_HPP
+#define TASK_HPP
+
 #include <string>
 #include <memory>
 #include "Object.hpp"

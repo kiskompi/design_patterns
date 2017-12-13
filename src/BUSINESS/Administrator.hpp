@@ -13,6 +13,10 @@
 #include "../DAO/DAO.hpp"
 #include "Deadline.hpp"
 #include "ElementFactory.hpp"
+#include "TaskSwitcher.hpp"
+#include "ElementDropper.hpp"
+#include "TaskLister.hpp"
+#include "EmployeeLister.hpp"
 
 class Administrator {
     Administrator ();
@@ -29,14 +33,13 @@ public:
     static Administrator& make_admin   ();
     
     template<typename T>
-    std::vector<T> list (std::string);
-
-
+    std::vector<T> list (const std::string& str = "");
+    
     template<typename T>
     std::vector<T> drop (std::string);
 
     template<typename T>
-    std::vector<T> make (std::vector<std::string>);
+    T make_element (std::vector<std::string>);
 
     Administrator (Administrator const&)           = delete;
     Administrator& operator=(Administrator const&) = delete;
@@ -45,6 +48,7 @@ public:
     Administrator& operator=(Administrator&&) = default;
 
     short assign_task  (const std::string& taskStr, const std::string& emplStr);
+    short switch_tasks (const std::string& taskStr, const std::string& emplStr);
 };
 
 Administrator::Administrator ()
@@ -59,8 +63,10 @@ Administrator& Administrator::make_admin ()
 }
 
 short Administrator::assign_task (const std::string& taskStr, const std::string& emplStr) {
-    std::vector<Task> tasks = list_tasks ();
-    std::vector<Employee> empls = list_employees ();
+	m_lister = TaskLister ();
+    std::vector<Task> 	  tasks = m_lister.list ();
+	m_lister = EmployeeLister ();
+    std::vector<Employee> empls = m_lister.list ();
     Task*     task = nullptr;
     Employee* empl = nullptr;
 
@@ -79,26 +85,25 @@ short Administrator::assign_task (const std::string& taskStr, const std::string&
     if (task == nullptr || empl == nullptr)
         return -1;
 
-    m_dao_task.create_table_tasks_employees ();
-    m_dao_task.assign (*empl, *task);
+    DAOTask dt = DAOTask();
+    dt.create_table_tasks_employees ();
+    dt.assign (*empl, *task);
     return 0;
 }
 
-
-
 template<typename T>
-std::vector<T> list (std::string str) {
-    m_lister.
+std::vector<T> Administrator::list (const std::string& str) {
+    return m_lister.list<T>(std::move(str));
 }
 
 
 template<typename T>
-std::vector<T> drop (std::string str) {
+std::vector<T> Administrator::drop (std::string str) {
 
 }
 
 template<typename T>
-std::vector<T> make (std::vector<std::string>) {
-
+T Administrator::make_element (std::vector<std::string> vec) {
+	return T(); 
 }
 #endif

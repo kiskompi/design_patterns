@@ -1,26 +1,24 @@
-#ifndef ELEMENTFACTORY_HPP
-#define ELEMENTFACTORY_HPP
+#ifndef EMPLOYEEFACTORY_HPP
+#define EMPLOYEEFACTORY_HPP
 
-#include "../TRANSFER/Project.hpp"
-#include "../TRANSFER/Task.hpp"
 #include "../TRANSFER/Employee.hpp"
+#include "../DAO/DAO.hpp"
 
 class EmployeeFactory: public ElementFactory
 {
-    DAOFactory<Employee> m_dao_empl = DAOFactory<Employee> ();
+    DAOEmployee m_dao_empl = DAOFactory ().get<DAOEmployee> ();
 
 public:
 	EmployeeFactory () {}
 
-    TransferObject get (   
+    virtual Employee get (   
             const std::string& p_name,
             const std::string& p_address, 
             const std::string& p_email,
             const std::string& p_phone) const {
         Employee empl = Employee (p_name, p_address, p_email, p_phone);
         m_dao_empl.add (&empl);
-        m_empls.push_back (empl);
-        return new Type ();
+        return empl;
     }
 
 	
@@ -28,4 +26,4 @@ public:
     
 
 
-#endif ELEMENTFACTORY_HPP
+#endif //EMPLOYEEFACTORY_HPP

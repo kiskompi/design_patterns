@@ -19,7 +19,7 @@ public:
 
 void ElementDropper::drop_project  (const std::string& p_name)
 {
-    DAOProject dao_project = m_df.get<Project> ();
+    const DAOProject& dao_project = m_df.get<DAOProject> ();
     auto projects = dao_project.getAll ();
     for (auto i: projects)
         if (i.get_name () == p_name)
@@ -29,7 +29,7 @@ void ElementDropper::drop_project  (const std::string& p_name)
 
 void ElementDropper::drop_task     (const std::string& p_name)
 {
-    DAOTask dao = m_df.get<Task> ();
+    DAOTask dao = m_df.get<DAOTask> ();
     auto tasks = dao.getAll ();
     
      for (auto i: tasks)
@@ -40,7 +40,7 @@ void ElementDropper::drop_task     (const std::string& p_name)
 
 void ElementDropper::drop_employee (const std::string& p_name)
 {
-    DAOTask dao = m_df.get<Task> ();
+    DAOTask dao = m_df.get<DAOTask> ();
     auto empls = dao.getAll ();
     
     for (auto i: empls)

@@ -5,10 +5,8 @@
 #include <sqlite3.h>
 
 #include "DAOInterface.hpp"
-#include "../LIB/Factory.hpp"
 
-
-class DAOFactory: public Factory<DAOInterface>
+class DAOFactory
 {
     sqlite3* hdl = query::hdl;
 public:
@@ -20,10 +18,9 @@ public:
     ~DAOFactory();
 
     template<typename DAOType>
-    DAOType* get () const {
+    DAOType get () const {
         static_assert(std::is_base_of<DAOInterface, DAOType>::value, "Template argument is not a DAO");
-
-        return new DAOType ();
+        return DAOType ();
     }
     
 };

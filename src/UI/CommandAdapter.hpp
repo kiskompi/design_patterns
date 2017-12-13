@@ -7,6 +7,9 @@
 #include <sstream>
 #include <stdlib.h>
 #include "../BUSINESS/Administrator.hpp"
+#include "../BUSINESS/EmployeeFactory.hpp"
+#include "../BUSINESS/TaskFactory.hpp"
+#include "../BUSINESS/ProjectFactory.hpp"
 
 enum class CMD {
     LIST,
@@ -32,7 +35,9 @@ struct Command {
 };
 
 class CommandAdapter {
-    Administrator& m_admin = Administrator::make_admin();
+    Administrator&  m_admin           = Administrator::make_admin();
+    ElementFactory  m_element_factory = ElementFactory ();
+    DAOFactory      m_dao_factory     = DAOFactory ();
 
     CMD         lookup_command (const std::string command) const;
     TARGET      lookup_target  (const std::string target)  const;
@@ -40,14 +45,14 @@ class CommandAdapter {
 public:
     
     CommandAdapter () {}
-    void execute_dummy (const std::string) const;
+    void execute_dummy (const std::string);
     void ask           (std::string& str) const;
 };
 
 static std::string str_tolower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), 
-                   [](unsigned char c){ return std::tolower(c); } // correct
-                  );
+        [](unsigned char c){ return std::tolower(c); } // correct
+    );
     return s;
 }
 
@@ -104,7 +109,7 @@ static std::vector<std::string> split(const std::string &txt)
     return tokens;
 }
 
-void CommandAdapter::execute_dummy (const std::string cmd) const {
+void CommandAdapter::execute_dummy (const std::string cmd) {
     // VERY DUMMY
     std::vector<std::string> v = split( cmd );
     if (v.empty ())
@@ -115,25 +120,25 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
             switch (lookup_target(v[1]))
             {
                 case TARGET::PROJECTS:{
-                    auto vec = m_admin.list<Project>  ();
+                    auto vec = m_admin.list<DAOProject>  ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::TASKS:{
-                    auto vec = m_admin.list<Task>  ();
+                    auto vec = m_admin.list<DAOTask>  ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::EMPLS:{
-                    auto vec = m_admin.list<Employee> ();
+                    auto vec = m_admin.list<DAOEmployee> ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::DEADLINES:{
-                    auto vec = m_admin.list<Deadline>  ();
+                    auto vec = m_admin.list<DAODeadline>  ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
@@ -168,7 +173,9 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    m_admin.make<Project> (v[2], v[3]);
+                    DAOProject dp = m_dao_factory.get<DAOProject> ();
+                    Project elem = m_element_factory.get_project (v[2], v[3]);
+                    dp.add (&elem);
                     break;
                 }
                 case TARGET::TASKS:{
@@ -176,7 +183,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    m_admin.make<Task> (v[2], v[3], v[4], v[5], v[6], v[7]);
+                    Task task = m_element_factory.get_task (v[2], v[3], v[4], v[5], v[6], v[7]);
                     break;
                 }
                 case TARGET::EMPLS:{
@@ -184,7 +191,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) const {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    m_admin.make<Employee> (v[2], v[3], v[4], v[5]);
+                    Employee empl = m_element_factory.get_employee (v[2], v[3], v[4], v[5]);
                     break;
                 }
                 default:

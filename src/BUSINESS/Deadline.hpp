@@ -3,7 +3,6 @@
 
 #include <ctime>
 #include "../TRANSFER/Date.hpp"
-
 class Deadline {
     Date m_due;
 public:
