@@ -11,7 +11,7 @@ class ProjectFactory: public ElementFactory
 public:
 	ProjectFactory () {}
 
-    virtual Project get (
+    virtual Project make_element (
         const std::string& p_name,
         const std::string& p_desc) const 
     {
@@ -21,7 +21,6 @@ public:
         return empl;
     }
 
-	
 };
     
 

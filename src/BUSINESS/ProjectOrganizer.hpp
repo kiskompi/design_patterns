@@ -15,7 +15,7 @@
 #include "../TRANSFER/Employee.hpp"
 
 class ProjectOrganizer {
-    Project*                      m_project;
+    Project*               m_project;
     std::vector<Task*>     m_tasks;
     std::vector<Employee*> m_emps;
 

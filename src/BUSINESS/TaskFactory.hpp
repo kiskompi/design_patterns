@@ -11,7 +11,7 @@ class TaskFactory: public ElementFactory
 public:
 	TaskFactory () {}
 
-    virtual Task get ( 
+    virtual Task make_element ( 
         const std::string& p_name, 
         const std::string& p_type,  
         const std::string& p_priority, 

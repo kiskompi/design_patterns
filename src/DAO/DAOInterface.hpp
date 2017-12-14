@@ -20,7 +20,7 @@ public:
     // =============
     // delete an entry from the database, which has the exact same values as the parameter Project
     // =============
-    virtual bool deleteFromDB   (sqlite3* hdl) const {}
+    virtual bool deleteFromDB   (sqlite3* hdl) const {return false;}; 
     // =============
     // creates a table in the database by running a query from Query.hpp
     // =============
@@ -33,7 +33,7 @@ public:
     // fills the database by running the queries from Query.hpp
     // =============
     virtual void fillTable      (const TransferObject* p)  const {}
-    virtual bool update         (const TransferObject* p)  const {}
+    virtual bool update         (const TransferObject* p)  const {return false;}
 private:
 
 };

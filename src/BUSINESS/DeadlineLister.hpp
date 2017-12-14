@@ -6,14 +6,7 @@
 
 class DeadlineLister: public ElementLister {
 public:
-    std::vector<Deadline> list () const {
-        std::vector<Task> 	  tasks = list<Task> ();
-        std::vector<Deadline> deadlines;
-        for (const auto& task: tasks)
-            deadlines.push_back (task.get_deadline ());
-        return deadlines;
-    }	
-   	
+    std::vector<Deadline> list () const; 
 };
 
 #endif

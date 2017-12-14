@@ -120,25 +120,25 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
             switch (lookup_target(v[1]))
             {
                 case TARGET::PROJECTS:{
-                    auto vec = m_admin.list<DAOProject>  ();
+                    auto vec = ElementLister().list_projects ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::TASKS:{
-                    auto vec = m_admin.list<DAOTask>  ();
+                    auto vec = ElementLister().list_tasks ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::EMPLS:{
-                    auto vec = m_admin.list<DAOEmployee> ();
+                    auto vec = ElementLister().list_employees ();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
                 }
                 case TARGET::DEADLINES:{
-                    auto vec = m_admin.list<DAODeadline>  ();
+                    auto vec = ElementLister().list_deadlines();
                     for (auto i: vec)
                         std::cout<<i.to_string ()<<"\n";
                     break;
@@ -152,13 +152,13 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
             switch (lookup_target(v[1]))
             {
                 case TARGET::PROJECTS:
-                    m_admin.drop<Project> (v[2]);
+					ElementDropper ().drop_project (v[2]);
                     break;
                 case TARGET::TASKS:
-                    m_admin.drop<Task> (v[2]);
+					ElementDropper ().drop_task(v[2]);
                     break;
                 case TARGET::EMPLS:
-                    m_admin.drop<Employee> (v[2]);
+					ElementDropper ().drop_employee (v[2]);
                     break;
                 default:
                     std::cerr<<"Bad argument!\n";
@@ -174,7 +174,8 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
                         break;
                     }
                     DAOProject dp = m_dao_factory.get<DAOProject> ();
-                    Project elem = m_element_factory.get_project (v[2], v[3]);
+					m_element_factory =  ProjectFactory ();
+                    Project elem = m_element_factory.make_element (v[2], v[3]);
                     dp.add (&elem);
                     break;
                 }
@@ -183,7 +184,9 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    Task task = m_element_factory.get_task (v[2], v[3], v[4], v[5], v[6], v[7]);
+                    DAOTask dp = m_dao_factory.get<DAOTask> ();
+					m_element_factory = TaskFactory ();
+                    Task task = m_element_factory.make_element (v[2], v[3], v[4], v[5], v[6], v[7]);
                     break;
                 }
                 case TARGET::EMPLS:{
@@ -191,7 +194,9 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
                         std::cerr<<"Not enough argument!\n";
                         break;
                     }
-                    Employee empl = m_element_factory.get_employee (v[2], v[3], v[4], v[5]);
+					DAOEmployee de = m_dao_factory.get<DAOEmployee> ();
+					m_element_factory = EmployeeFactory ();
+                    Employee empl = m_element_factory.make_element (v[2], v[3], v[4], v[5]);
                     break;
                 }
                 default:
@@ -201,7 +206,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
         break;
         case CMD::SWITCH: {
             if (lookup_target(v[1]) == TARGET::TASKS){
-                short err = m_admin.switch_tasks (v[2], v[3]);
+                short err = TaskSwitcher().switch_tasks (v[2], v[3]);
                 if (err != 0)
                     std::cerr<<"No such task!\n ";
             }

@@ -1,5 +1,1 @@
-inp=$1
-if ("$inp" "-eq" 'bus_t1')
-then
-	g++ -std=c++14 src/TEST/BusinessTest01.cpp -o build/BusinessTest.o -lpthread -ldl
-fi
+g++ -g -O0 -std=c++14  -fPIC -lpthread -ldl -I/usr/include/Qt -I/usr/include/QtCore -lQt5Core -I/usr/include/QtGui -lQt5Gui -I/usr/include/QtWidgets src/TEST/QTTest01.cpp src/SQLITE/sqlite3.o -o build/QTTest01.o 

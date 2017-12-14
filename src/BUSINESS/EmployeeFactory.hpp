@@ -11,7 +11,7 @@ class EmployeeFactory: public ElementFactory
 public:
 	EmployeeFactory () {}
 
-    virtual Employee get (   
+    virtual Employee make_element (   
             const std::string& p_name,
             const std::string& p_address, 
             const std::string& p_email,
@@ -21,7 +21,6 @@ public:
         return empl;
     }
 
-	
 };
     
 

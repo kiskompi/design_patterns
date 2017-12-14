@@ -1,0 +1,16 @@
+CC=g++
+DEPS = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+CFLAGS= 
+LDFLAGS=
+OBJECTS=$(DEPS:%.cpp=build/%.o) $(src/SQLITE/sqlite3.o)
+EXECUTABLE=build/application.o
+
+%.o: %.c $(DEPS)
+	$(CC) $@ $< $(CFLAGS)
+
+all: 
+	$(CC) $(CFLAGS) $(DEPS) -o $(EXECUTABLE)
+clean: 
+	rm $(OBJECTS)
+$(EXECUTABLE): $(OBJECTS)
+
