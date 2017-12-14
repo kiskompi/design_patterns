@@ -9,7 +9,7 @@ DAOEmployee::DAOEmployee  ()
 
 DAOEmployee::~DAOEmployee ()
 {
-    sqlite3_close(query::hdl);
+//    sqlite3_close(query::hdl);
 }
 
 DAOEmployee::Vect DAOEmployee::getAll ( ) const

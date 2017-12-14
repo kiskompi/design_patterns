@@ -45,7 +45,7 @@ class CommandAdapter {
 public:
     
     CommandAdapter () {}
-    void execute_dummy (const std::string);
+    std::string execute_dummy (const std::string);
     void ask           (std::string& str) const;
 };
 #endif // COMMANDADAPTER_HPP

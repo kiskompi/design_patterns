@@ -60,11 +60,12 @@ static std::vector<std::string> split(const std::string &txt)
     return tokens;
 }
 
-void CommandAdapter::execute_dummy (const std::string cmd) {
+std::string CommandAdapter::execute_dummy (const std::string cmd) {
     // VERY DUMMY
     std::vector<std::string> v = split( cmd );
     if (v.empty ())
-        return;
+        return "EMPTY";
+	std::string res = "";
     switch (lookup_command(v[0]))
     {
         case CMD::LIST:{
@@ -72,30 +73,37 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
             {
                 case TARGET::PROJECTS:{
                     auto vec = ElementLister().list_projects ();
-                    for (auto i: vec)
-                        std::cout<<i.to_string ()<<"\n";
+                    for (auto i: vec){
+						res += i.to_string () + ";";
+					}
                     break;
                 }
                 case TARGET::TASKS:{
                     auto vec = ElementLister().list_tasks ();
-                    for (auto i: vec)
-                        std::cout<<i.to_string ()<<"\n";
-                    break;
+                    for (auto i: vec) {
+						res += i.to_string () + ";";
+                    }
+					break;
                 }
                 case TARGET::EMPLS:{
                     auto vec = ElementLister().list_employees ();
-                    for (auto i: vec)
-                        std::cout<<i.to_string ()<<"\n";
+                    for (auto i: vec) {
+						res += i.to_string () + ";";
+					}
                     break;
                 }
                 case TARGET::DEADLINES:{
                     auto vec = ElementLister().list_deadlines();
-                    for (auto i: vec)
-                        std::cout<<i.to_string ()<<"\n";
+                    for (auto i: vec) {
+						res += i.to_string () + ";";
+					}
                     break;
                 }
                 default:
                     std::cerr<<"Bad argument!\n";
+                    return "ERR";
+			if (!res.empty())
+				return "EMPTY";
             }
         }
         break;
@@ -125,9 +133,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
                         break;
                     }
                     DAOProject dp = m_dao_factory.get<DAOProject> ();
-					m_element_factory =  ProjectFactory ();
-                    Project elem = m_element_factory.make_element (v[2], v[3]);
-                    dp.add (&elem);
+                    Project elem = ProjectFactory().make_element (v[2], v[3]);
                     break;
                 }
                 case TARGET::TASKS:{
@@ -184,6 +190,7 @@ void CommandAdapter::execute_dummy (const std::string cmd) {
             std::cout<<"Bad command. For help, write: HELP\n";
     }
     std::cout<<std::flush;
+	return res;
 }
 
 void CommandAdapter::ask (std::string& str) const {

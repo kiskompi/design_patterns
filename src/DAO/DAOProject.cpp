@@ -9,7 +9,7 @@ DAOProject::DAOProject ()
 
 DAOProject::~DAOProject ()
 {
-    sqlite3_close(query::hdl);
+//    sqlite3_close(query::hdl);
 }
 
 void DAOProject::createTable () const 

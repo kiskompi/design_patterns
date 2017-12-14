@@ -2,12 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "../UI/CommandAdapter.hpp"
+#include "CommandAdapter.hpp"
+#include "ActionHandler.hpp"
 class QAction;
+class QString;
 class QMenu;
 class QPlainTextEdit;
 class QSessionManager;
-class QTableView;
+class QTableWidget;
 
 
 class MainWindow : public QMainWindow
@@ -26,15 +28,12 @@ private slots:
 
 	// list things
 	void openListMenu ();
-	void listElements ();
 
 	// delete things
 	void openDeleteMenu ();
-	void deleteElements ();
 
 	// add things
 	void openAddMenu ();
-	void addElement  ();
 #ifndef QT_NO_SESSIONMANAGER
     void commitData(QSessionManager &);
 #endif
@@ -47,9 +46,10 @@ private:
     void setCurrentFile	 (const QString &fileName);
     QString strippedName (const QString &fullFileName);
 
-    QTableView*    tableView;
+    QTableWidget*  tableView;
     QString 	   curFile;
 	CommandAdapter cmdAdapt;
+	ActionHandler  actHdl;
 };
 
 #endif

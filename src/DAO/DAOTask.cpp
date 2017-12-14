@@ -9,7 +9,7 @@ DAOTask::DAOTask ()
 
 DAOTask::~DAOTask()
 {
-    sqlite3_close(query::hdl);
+//    sqlite3_close(query::hdl);
 }
 
 DAOTask::Vect DAOTask::getAll ( ) const

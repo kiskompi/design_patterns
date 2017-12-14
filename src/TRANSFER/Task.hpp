@@ -41,7 +41,7 @@ public:
     virtual std::string set_deadline  (const Date&        param); 
     void                assign_to(const Employee& p_emp);
 
-    ~Task () = default;
+    ~Task () {} 
     friend class DAOTask;
 private:
     std::string m_name     = "";

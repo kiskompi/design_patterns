@@ -13,8 +13,8 @@ MAKEFILE      = Makefile
 CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -pipe -O2 -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -O2 -W -D_REENTRANT -fPIC $(DEFINES)
+CFLAGS        = -pipe -O2  -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -O2  -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I. -isystem /usr/include/QtWidgets -isystem /usr/include/QtGui -isystem /usr/include/QtCore -I. -isystem /usr/include/libdrm -I/usr/lib64/qt5/mkspecs/linux-g++ -Isrc/SQLITE
 QMAKE         = /usr/bin/qmake
 DEL_FILE      = rm -f
@@ -58,18 +58,19 @@ SOURCES       = qrc_application.cpp \
 		src/BUSINESS/TaskLister.cpp \
 		src/BUSINESS/TaskSwitcher.cpp \
 		src/DAO/DAOEmployee.cpp \
-		src/DAO/DAOInterface.cpp \
 		src/DAO/DAOFactory.cpp \
+		src/DAO/DAOInterface.cpp \
 		src/DAO/DAOProject.cpp \
 		src/DAO/DAOTask.cpp \
-		src/TEST/mainwindow.cpp \
 		src/TEST/QTTest01.cpp \
 		src/TRANSFER/Date.cpp \
 		src/TRANSFER/Employee.cpp \
 		src/TRANSFER/Project.cpp \
 		src/TRANSFER/Task.cpp \
-		src/UI/CommandAdapter.cpp\
-		moc_mainwindow.cpp
+		src/UI/ActionHandler.cpp \
+		src/UI/CommandAdapter.cpp \
+		src/UI/MainWindow.cpp \
+		moc_MainWindow.cpp
 OBJECTS       = qrc_application.o \
 		Administrator.o \
 		DeadlineLister.o \
@@ -78,18 +79,19 @@ OBJECTS       = qrc_application.o \
 		TaskLister.o \
 		TaskSwitcher.o \
 		DAOEmployee.o \
-		DAOInterface.o \
 		DAOFactory.o \
+		DAOInterface.o \
 		DAOProject.o \
 		DAOTask.o \
-		mainwindow.o \
 		QTTest01.o \
 		Date.o \
 		Employee.o \
 		Project.o \
 		Task.o \
+		ActionHandler.o \
 		CommandAdapter.o \
-		moc_mainwindow.o
+		MainWindow.o \
+		moc_MainWindow.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -243,13 +245,16 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		src/DAO/DAOTask.hpp \
 		src/DAO/Query.hpp \
 		src/LIB/dynamic_array.hpp \
-		src/TEST/mainwindow.h \
 		src/TRANSFER/Date.hpp \
 		src/TRANSFER/Employee.hpp \
 		src/TRANSFER/Object.hpp \
 		src/TRANSFER/Project.hpp \
 		src/TRANSFER/Task.hpp \
-		src/UI/CommandAdapter.hpp qrc_application.cpp \
+		src/UI/ActionHandler.hpp \
+		src/UI/CommandAdapter.hpp \
+		src/UI/DeleteMenuDlg.hpp \
+		src/UI/ListMenuDlg.hpp \
+		src/UI/MainWindow.h qrc_application.cpp \
 		src/BUSINESS/Administrator.cpp \
 		src/BUSINESS/DeadlineLister.cpp \
 		src/BUSINESS/ElementDropper.cpp \
@@ -257,17 +262,18 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		src/BUSINESS/TaskLister.cpp \
 		src/BUSINESS/TaskSwitcher.cpp \
 		src/DAO/DAOEmployee.cpp \
-		src/DAO/DAOInterface.cpp \
 		src/DAO/DAOFactory.cpp \
+		src/DAO/DAOInterface.cpp \
 		src/DAO/DAOProject.cpp \
 		src/DAO/DAOTask.cpp \
-		src/TEST/mainwindow.cpp \
 		src/TEST/QTTest01.cpp \
 		src/TRANSFER/Date.cpp \
 		src/TRANSFER/Employee.cpp \
 		src/TRANSFER/Project.cpp \
 		src/TRANSFER/Task.cpp \
-		src/UI/CommandAdapter.cpp
+		src/UI/ActionHandler.cpp \
+		src/UI/CommandAdapter.cpp \
+		src/UI/MainWindow.cpp
 QMAKE_TARGET  = Project
 DESTDIR       = 
 TARGET        = Project
@@ -568,8 +574,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents application.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/BUSINESS/Administrator.hpp src/BUSINESS/Deadline.hpp src/BUSINESS/DeadlineLister.hpp src/BUSINESS/ElementDropper.hpp src/BUSINESS/ElementFactory.hpp src/BUSINESS/ElementLister.hpp src/BUSINESS/EmployeeFactory.hpp src/BUSINESS/EmployeeLister.hpp src/BUSINESS/ProjectFactory.hpp src/BUSINESS/ProjectOrganizer.hpp src/BUSINESS/TaskFactory.hpp src/BUSINESS/TaskHandler.hpp src/BUSINESS/TaskLister.hpp src/BUSINESS/TaskSwitcher.hpp src/DAO/DAO.hpp src/DAO/DAOEmployee.hpp src/DAO/DAOFactory.hpp src/DAO/DAOInterface.hpp src/DAO/DAOProject.hpp src/DAO/DAOTask.hpp src/DAO/Query.hpp src/LIB/dynamic_array.hpp src/TEST/mainwindow.h src/TRANSFER/Date.hpp src/TRANSFER/Employee.hpp src/TRANSFER/Object.hpp src/TRANSFER/Project.hpp src/TRANSFER/Task.hpp src/UI/CommandAdapter.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents qrc_application.cpp src/BUSINESS/Administrator.cpp src/BUSINESS/DeadlineLister.cpp src/BUSINESS/ElementDropper.cpp src/BUSINESS/ElementLister.cpp src/BUSINESS/TaskLister.cpp src/BUSINESS/TaskSwitcher.cpp src/DAO/DAOEmployee.cpp src/DAO/DAOInterface.cpp src/DAO/DAOFactory.cpp src/DAO/DAOProject.cpp src/DAO/DAOTask.cpp src/TEST/mainwindow.cpp src/TEST/QTTest01.cpp src/TRANSFER/Date.cpp src/TRANSFER/Employee.cpp src/TRANSFER/Project.cpp src/TRANSFER/Task.cpp src/UI/CommandAdapter.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/BUSINESS/Administrator.hpp src/BUSINESS/Deadline.hpp src/BUSINESS/DeadlineLister.hpp src/BUSINESS/ElementDropper.hpp src/BUSINESS/ElementFactory.hpp src/BUSINESS/ElementLister.hpp src/BUSINESS/EmployeeFactory.hpp src/BUSINESS/EmployeeLister.hpp src/BUSINESS/ProjectFactory.hpp src/BUSINESS/ProjectOrganizer.hpp src/BUSINESS/TaskFactory.hpp src/BUSINESS/TaskHandler.hpp src/BUSINESS/TaskLister.hpp src/BUSINESS/TaskSwitcher.hpp src/DAO/DAO.hpp src/DAO/DAOEmployee.hpp src/DAO/DAOFactory.hpp src/DAO/DAOInterface.hpp src/DAO/DAOProject.hpp src/DAO/DAOTask.hpp src/DAO/Query.hpp src/LIB/dynamic_array.hpp src/TRANSFER/Date.hpp src/TRANSFER/Employee.hpp src/TRANSFER/Object.hpp src/TRANSFER/Project.hpp src/TRANSFER/Task.hpp src/UI/ActionHandler.hpp src/UI/CommandAdapter.hpp src/UI/DeleteMenuDlg.hpp src/UI/ListMenuDlg.hpp src/UI/MainWindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents qrc_application.cpp src/BUSINESS/Administrator.cpp src/BUSINESS/DeadlineLister.cpp src/BUSINESS/ElementDropper.cpp src/BUSINESS/ElementLister.cpp src/BUSINESS/TaskLister.cpp src/BUSINESS/TaskSwitcher.cpp src/DAO/DAOEmployee.cpp src/DAO/DAOFactory.cpp src/DAO/DAOInterface.cpp src/DAO/DAOProject.cpp src/DAO/DAOTask.cpp src/TEST/QTTest01.cpp src/TRANSFER/Date.cpp src/TRANSFER/Employee.cpp src/TRANSFER/Project.cpp src/TRANSFER/Task.cpp src/UI/ActionHandler.cpp src/UI/CommandAdapter.cpp src/UI/MainWindow.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -603,7 +609,6 @@ qrc_application.cpp: application.qrc \
 		src/TEST/cut.png \
 		src/TEST/copy.png \
 		src/TEST/delete.png \
-		src/TEST/new.png \
 		src/TEST/paste.png
 	/usr/bin/rcc -name application application.qrc -o qrc_application.cpp
 
@@ -613,10 +618,10 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: src/UI/CommandAdapter.hpp \
+	-$(DEL_FILE) moc_MainWindow.cpp
+moc_MainWindow.cpp: src/UI/CommandAdapter.hpp \
 		src/BUSINESS/Administrator.hpp \
 		src/DAO/DAO.hpp \
 		src/DAO/DAOFactory.hpp \
@@ -641,10 +646,11 @@ moc_mainwindow.cpp: src/UI/CommandAdapter.hpp \
 		src/BUSINESS/EmployeeFactory.hpp \
 		src/BUSINESS/TaskFactory.hpp \
 		src/BUSINESS/ProjectFactory.hpp \
-		src/TEST/mainwindow.h \
+		src/UI/ActionHandler.hpp \
+		src/UI/MainWindow.h \
 		moc_predefs.h \
 		/usr/bin/moc
-	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/andris/Documents/egyetem/design_patterns/Project -I/home/andris/Documents/egyetem/design_patterns/Project -I/usr/include/QtWidgets -I/usr/include/QtGui -I/usr/include/QtCore -I/usr/include/c++/7.2.0 -I/usr/include/c++/7.2.0/x86_64-solus-linux -I/usr/include/c++/7.2.0/backward -I/usr/lib64/gcc/x86_64-solus-linux/7.2.0/include -I/usr/lib64/gcc/x86_64-solus-linux/7.2.0/include-fixed -I/usr/include src/TEST/mainwindow.h -o moc_mainwindow.cpp
+	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/andris/Documents/egyetem/design_patterns/Project -I/home/andris/Documents/egyetem/design_patterns/Project -I/usr/include/QtWidgets -I/usr/include/QtGui -I/usr/include/QtCore -I/usr/include/c++/7.2.0 -I/usr/include/c++/7.2.0/x86_64-solus-linux -I/usr/include/c++/7.2.0/backward -I/usr/lib64/gcc/x86_64-solus-linux/7.2.0/include -I/usr/lib64/gcc/x86_64-solus-linux/7.2.0/include-fixed -I/usr/include src/UI/MainWindow.h -o moc_MainWindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -781,16 +787,16 @@ DAOEmployee.o: src/DAO/DAOEmployee.cpp src/DAO/DAOEmployee.hpp \
 		src/TRANSFER/Employee.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DAOEmployee.o src/DAO/DAOEmployee.cpp
 
-DAOInterface.o: src/DAO/DAOInterface.cpp src/DAO/DAOInterface.hpp \
-		src/TRANSFER/Object.hpp \
-		src/DAO/Query.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DAOInterface.o src/DAO/DAOInterface.cpp
-
 DAOFactory.o: src/DAO/DAOFactory.cpp src/DAO/DAOFactory.hpp \
 		src/DAO/DAOInterface.hpp \
 		src/TRANSFER/Object.hpp \
 		src/DAO/Query.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DAOFactory.o src/DAO/DAOFactory.cpp
+
+DAOInterface.o: src/DAO/DAOInterface.cpp src/DAO/DAOInterface.hpp \
+		src/TRANSFER/Object.hpp \
+		src/DAO/Query.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DAOInterface.o src/DAO/DAOInterface.cpp
 
 DAOProject.o: src/DAO/DAOProject.cpp src/DAO/DAOProject.hpp \
 		src/DAO/DAOInterface.hpp \
@@ -809,7 +815,7 @@ DAOTask.o: src/DAO/DAOTask.cpp src/DAO/DAOTask.hpp \
 		src/TRANSFER/Employee.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DAOTask.o src/DAO/DAOTask.cpp
 
-mainwindow.o: src/TEST/mainwindow.cpp src/TEST/mainwindow.h \
+QTTest01.o: src/TEST/QTTest01.cpp src/UI/MainWindow.h \
 		src/UI/CommandAdapter.hpp \
 		src/BUSINESS/Administrator.hpp \
 		src/DAO/DAO.hpp \
@@ -834,35 +840,8 @@ mainwindow.o: src/TEST/mainwindow.cpp src/TEST/mainwindow.h \
 		src/BUSINESS/EmployeeLister.hpp \
 		src/BUSINESS/EmployeeFactory.hpp \
 		src/BUSINESS/TaskFactory.hpp \
-		src/BUSINESS/ProjectFactory.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o src/TEST/mainwindow.cpp
-
-QTTest01.o: src/TEST/QTTest01.cpp src/TEST/mainwindow.h \
-		src/UI/CommandAdapter.hpp \
-		src/BUSINESS/Administrator.hpp \
-		src/DAO/DAO.hpp \
-		src/DAO/DAOFactory.hpp \
-		src/DAO/DAOInterface.hpp \
-		src/TRANSFER/Object.hpp \
-		src/DAO/Query.hpp \
-		src/DAO/DAOEmployee.hpp \
-		src/TRANSFER/Employee.hpp \
-		src/DAO/DAOProject.hpp \
-		src/TRANSFER/Project.hpp \
-		src/DAO/DAOTask.hpp \
-		src/TRANSFER/Task.hpp \
-		src/BUSINESS/Deadline.hpp \
-		src/TRANSFER/Date.hpp \
-		src/DAO/DAUtils.cpp \
-		src/BUSINESS/ElementFactory.hpp \
-		src/BUSINESS/TaskSwitcher.hpp \
-		src/BUSINESS/ElementDropper.hpp \
-		src/BUSINESS/TaskLister.hpp \
-		src/BUSINESS/ElementLister.hpp \
-		src/BUSINESS/EmployeeLister.hpp \
-		src/BUSINESS/EmployeeFactory.hpp \
-		src/BUSINESS/TaskFactory.hpp \
-		src/BUSINESS/ProjectFactory.hpp
+		src/BUSINESS/ProjectFactory.hpp \
+		src/UI/ActionHandler.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o QTTest01.o src/TEST/QTTest01.cpp
 
 Date.o: src/TRANSFER/Date.cpp src/TRANSFER/Date.hpp \
@@ -883,6 +862,34 @@ Task.o: src/TRANSFER/Task.cpp src/TRANSFER/Task.hpp \
 		src/TRANSFER/Date.hpp \
 		src/TRANSFER/Employee.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Task.o src/TRANSFER/Task.cpp
+
+ActionHandler.o: src/UI/ActionHandler.cpp src/UI/ActionHandler.hpp \
+		src/UI/CommandAdapter.hpp \
+		src/BUSINESS/Administrator.hpp \
+		src/DAO/DAO.hpp \
+		src/DAO/DAOFactory.hpp \
+		src/DAO/DAOInterface.hpp \
+		src/TRANSFER/Object.hpp \
+		src/DAO/Query.hpp \
+		src/DAO/DAOEmployee.hpp \
+		src/TRANSFER/Employee.hpp \
+		src/DAO/DAOProject.hpp \
+		src/TRANSFER/Project.hpp \
+		src/DAO/DAOTask.hpp \
+		src/TRANSFER/Task.hpp \
+		src/BUSINESS/Deadline.hpp \
+		src/TRANSFER/Date.hpp \
+		src/DAO/DAUtils.cpp \
+		src/BUSINESS/ElementFactory.hpp \
+		src/BUSINESS/TaskSwitcher.hpp \
+		src/BUSINESS/ElementDropper.hpp \
+		src/BUSINESS/TaskLister.hpp \
+		src/BUSINESS/ElementLister.hpp \
+		src/BUSINESS/EmployeeLister.hpp \
+		src/BUSINESS/EmployeeFactory.hpp \
+		src/BUSINESS/TaskFactory.hpp \
+		src/BUSINESS/ProjectFactory.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ActionHandler.o src/UI/ActionHandler.cpp
 
 CommandAdapter.o: src/UI/CommandAdapter.cpp src/UI/CommandAdapter.hpp \
 		src/BUSINESS/Administrator.hpp \
@@ -911,11 +918,40 @@ CommandAdapter.o: src/UI/CommandAdapter.cpp src/UI/CommandAdapter.hpp \
 		src/BUSINESS/ProjectFactory.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CommandAdapter.o src/UI/CommandAdapter.cpp
 
+MainWindow.o: src/UI/MainWindow.cpp src/UI/MainWindow.h \
+		src/UI/CommandAdapter.hpp \
+		src/BUSINESS/Administrator.hpp \
+		src/DAO/DAO.hpp \
+		src/DAO/DAOFactory.hpp \
+		src/DAO/DAOInterface.hpp \
+		src/TRANSFER/Object.hpp \
+		src/DAO/Query.hpp \
+		src/DAO/DAOEmployee.hpp \
+		src/TRANSFER/Employee.hpp \
+		src/DAO/DAOProject.hpp \
+		src/TRANSFER/Project.hpp \
+		src/DAO/DAOTask.hpp \
+		src/TRANSFER/Task.hpp \
+		src/BUSINESS/Deadline.hpp \
+		src/TRANSFER/Date.hpp \
+		src/DAO/DAUtils.cpp \
+		src/BUSINESS/ElementFactory.hpp \
+		src/BUSINESS/TaskSwitcher.hpp \
+		src/BUSINESS/ElementDropper.hpp \
+		src/BUSINESS/TaskLister.hpp \
+		src/BUSINESS/ElementLister.hpp \
+		src/BUSINESS/EmployeeLister.hpp \
+		src/BUSINESS/EmployeeFactory.hpp \
+		src/BUSINESS/TaskFactory.hpp \
+		src/BUSINESS/ProjectFactory.hpp \
+		src/UI/ActionHandler.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o src/UI/MainWindow.cpp
+
 qrc_application.o: qrc_application.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_application.o qrc_application.cpp
 
-moc_mainwindow.o: moc_mainwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+moc_MainWindow.o: moc_MainWindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainWindow.o moc_MainWindow.cpp
 
 ####### Install
 

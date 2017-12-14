@@ -10,7 +10,11 @@ public:
     Employee () = default;
     Employee (Employee  &&) = default;
     Employee (const Employee  &) = default;
-    Employee (const std::string& name,const std::string& address, const std::string& email,const std::string& phone);
+    Employee (
+		const std::string& name,
+		const std::string& address, 
+		const std::string& email,
+		const std::string& phone);
     Employee  &operator=(Employee  &&) = default;
     Employee  &operator=(const Employee  &) = default;
     ~Employee () = default;
