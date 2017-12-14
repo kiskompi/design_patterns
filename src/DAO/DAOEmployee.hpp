@@ -11,7 +11,6 @@ class DAOEmployee: public DAOInterface
     typedef std::vector<Employee> Vect;
     
     static int callback_select (void* used, int argc, char **argv, char**azColName);
-    sqlite3* hdl = query::hdl;
 
 public:
     DAOEmployee ();

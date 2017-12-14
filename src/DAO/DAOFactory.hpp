@@ -15,7 +15,7 @@ public:
     DAOFactory (const DAOFactory &)            = default;
     DAOFactory &operator= (DAOFactory &&)      = default;
     DAOFactory &operator= (const DAOFactory &) = default;
-    ~DAOFactory();
+    ~DAOFactory() = default;
 
     template<typename DAOType>
     inline DAOType get () const {
@@ -25,13 +25,4 @@ public:
     
 };
 
-DAOFactory::DAOFactory()
-{
-    if (hdl == nullptr)
-        sqlite3_open ("test.db", &hdl);    
-}
-
-DAOFactory::~DAOFactory()
-{
-}
 #endif // !DAO_FACTORY

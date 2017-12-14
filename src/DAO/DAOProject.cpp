@@ -3,25 +3,25 @@
 
 DAOProject::DAOProject ()
 {
-    if (hdl == nullptr)
-        sqlite3_open("test.db", &hdl);
+    if (query::hdl == nullptr)
+        sqlite3_open("test.db", &query::hdl);
 }
 
 DAOProject::~DAOProject ()
 {
-    sqlite3_close(hdl);
+    sqlite3_close(query::hdl);
 }
 
 void DAOProject::createTable () const 
 {
-    int err  = sqlite3_exec (hdl, query::CREATE_TABLE_PROJECTS, NULL, NULL, NULL);
+    int err  = sqlite3_exec (query::hdl, query::CREATE_TABLE_PROJECTS, NULL, NULL, NULL);
 }
 
 void DAOProject::fillTable   () const 
 {
     int err = 0;
     for (auto q: query::INSERT_INTO_PROJECTS)
-    if ((err = sqlite3_exec (hdl, q, NULL, NULL, NULL)) != 0) {
+    if ((err = sqlite3_exec (query::hdl, q, NULL, NULL, NULL)) != 0) {
         break;  
     }
 }
@@ -29,7 +29,7 @@ void DAOProject::fillTable   () const
 DAOProject::Vect DAOProject::getAll ( ) const 
 {
     Vect vect = Vect();
-    int  err  = sqlite3_exec (hdl, "SELECT * FROM PROJECTS;", callback_select, &vect, NULL);
+    int  err  = sqlite3_exec (query::hdl, "SELECT * FROM PROJECTS;", callback_select, &vect, NULL);
     return vect;
 }
 
@@ -38,7 +38,7 @@ DAOProject::Vect DAOProject::select (TransferObject* p) const
     Project* project = reinterpret_cast<Project*>(p);    
     std::string query = "SELECT * FROM PROJECTS WHERE NAME =\'" + project->get_name () + "\'";
     Vect vec = Vect();
-    int err = sqlite3_exec (hdl, query.c_str (), callback_select, &vec, NULL);
+    int err = sqlite3_exec (query::hdl, query.c_str (), callback_select, &vec, NULL);
     return vec;
 }
 
@@ -55,8 +55,8 @@ bool DAOProject::deleteFromDB (TransferObject* p) const
     std::string query = "DELETE FROM PROJECTS WHERE NAME =\'"
                       + project->get_name () + "\' AND DESC = \'" 
                       + project->get_desc () + "\';";
-    int err = sqlite3_exec (hdl, query.c_str (), NULL,NULL, NULL);
-    //std::cout<<query<<"\n"<<sqlite3_errmsg(hdl)<<std::endl;
+    int err = sqlite3_exec (query::hdl, query.c_str (), NULL,NULL, NULL);
+    //std::cout<<query<<"\n"<<sqlite3_errmsg(query::hdl)<<std::endl;
     return false;
 }
 
@@ -64,7 +64,7 @@ void DAOProject::add (TransferObject* p) const
 {
     Project* project = reinterpret_cast<Project*>(p);    
     std::string query = "INSERT INTO PROJECTS VALUES(" + project->to_string () +  ");";
-    int err = sqlite3_exec (hdl, query.c_str (), NULL, NULL, NULL);
+    int err = sqlite3_exec (query::hdl, query.c_str (), NULL, NULL, NULL);
 }
 
 

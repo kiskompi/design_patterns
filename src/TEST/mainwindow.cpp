@@ -19,7 +19,6 @@ MainWindow::MainWindow()
             this, &MainWindow::commitData);
 #endif
 
-    setCurrentFile(QString());
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
@@ -45,17 +44,17 @@ void MainWindow::createActions()
     const QIcon deleteIcon = QIcon::fromTheme("document-new", QIcon(":/images/delete.png"));
     QAction*	deleteAct   = new QAction(deleteIcon, tr("&Delete"), this);
     deleteAct ->setShortcuts(QKeySequence::New);
-    deleteAct ->setStatusTip(tr(""));
-    connect(deleteAct, &QAction::triggered, this, &MainWindow::deleteElements);
-    fileMenu->addAction(deleteAct);
-    fileToolBar->addAction(deleteAct);
+    deleteAct ->setStatusTip(tr("Delete database entry"));
+    connect(deleteAct, &QAction::triggered, this, &MainWindow::openDeleteMenu);
+    fileMenu	-> addAction(deleteAct);
+    fileToolBar	-> addAction(deleteAct);
 
 	// create Add things
     const QIcon addIcon = QIcon::fromTheme("document-open", QIcon(":/images/open.png"));
     QAction*	addAct  = new QAction(addIcon, tr("&Add..."), this);
     addAct	-> setShortcuts(QKeySequence::Open);
     addAct	-> setStatusTip(tr("Add database entry"));
-    connect(addAct, &QAction::triggered, this, &MainWindow::addElement);
+    connect(addAct, &QAction::triggered, this, &MainWindow::openAddMenu);
     fileMenu    -> addAction(addAct);
     fileToolBar -> addAction(addAct);
 
@@ -64,7 +63,7 @@ void MainWindow::createActions()
     QAction*	listAct  = new QAction(listIcon, tr("&List"), this);
     listAct -> setShortcuts(QKeySequence::Save);
     listAct -> setStatusTip(tr("List database entry"));
-    connect(listAct, &QAction::triggered, this, &MainWindow::listElements);
+    connect(listAct, &QAction::triggered, this, &MainWindow::openListMenu);
     fileMenu	-> addAction(listAct);
     fileToolBar -> addAction(listAct);
 
@@ -176,7 +175,11 @@ void MainWindow::commitData(QSessionManager &manager)
 
 void MainWindow::openDeleteMenu () {}
 void MainWindow::openAddMenu    () {}
-void MainWindow::openListMenu   () {}
+// can filter by type (scrolldown list): projectm task, deadline, empolyee
+void MainWindow::openListMenu   () 
+{
+
+}
 
 void MainWindow::deleteElements () {}
 void MainWindow::listElements 	() {}
